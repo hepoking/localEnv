@@ -1,0 +1,83 @@
+■node.js(windows)のインストール
+https://nodejs.org/ja/
+から安定板をインストール
+
+$ node -v
+v10.16.3
+
+で確認する。
+
+■expressJsのインストール
+・作業ディレクトリに移動
+・npm initでpackage.jsonを設定
+⇒package name だけlocalenvを設定し、あとは全部Enter
+
+-----------------------------------------
+・npm install -g express --save
+・npm install express-generator -g
+・express lovalenv
+⇒これでexpressjsのテンプレートが作成される。
+
+これで、npm startで起動できるはず。
+・npm install
+⇒依存関係のインストール
+・cd lovalenv
+・npm start
+■ejsのインストール
+・npm install ejs
+
+■VSCode側の設定
+・アプリケーション（binフォルダがある箇所）のディレクトリに
+jsconfig.jsonを設定し、以下を追記
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs"
+    }
+}
+
+・npm install -g typings
+・まず、デバッグ実行を行う。
+⇒launch.jsonが出来上がるので、
+内容を以下に修正
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceFolder}\\localenv\\app.js"
+        }
+    ]
+}
+
+⇒現状、デバッグ実行はできず。。
+
+■コマンドプロンプト実行
+app.jsに
+var exec = require('child_process').exec;
+
+を追加。
+
+/* call bat */
+router.get('/callBat', function (req, res, next) {
+  var cmd = '"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" --new-window "https://www.google.com/?hl=ja"';
+  exec(cmd, function (error, stdout, stderr) {
+    // シェル上でコマンドを実行できなかった場合のエラー処理
+    if (error !== null) {
+      console.log('exec error: ' + error);
+      return;
+    }
+
+    // シェル上で実行したコマンドの標準出力が stdout に格納されている
+    console.log('stdout: ' + stdout);
+  });
+  res.render('index', { title: 'Express' });
+});
+
+みたいな感じ。
+
