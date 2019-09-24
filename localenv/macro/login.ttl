@@ -1,0 +1,24 @@
+; File: login.ttl
+; Description: auto login with SSH2 protocol
+
+
+username = param3
+hostname = param4
+userpasswd = param5
+keyfile = param6
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+msg = hostname
+;strconcat msg ':22 /ssh /auth=password /user='
+strconcat msg ':22 /ssh /auth=publickey /user='
+strconcat msg username
+strconcat msg ' /keyfile='
+strconcat msg keyfile
+strconcat msg ' /passwd='
+strconcat msg userpasswd
+
+connect msg
+
+wait '$'
+sendln 'exit'
+end

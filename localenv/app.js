@@ -9,6 +9,26 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+// custom.
+var fs = require('fs');
+var readline = require('readline');
+var prop = [];
+
+/* properties */
+var macroPath = path.join(__dirname, 'macro');
+var csvPath = path.join(macroPath, 'conf', 'env.csv');
+
+var getFile = function (fname) {
+  var contents = fs.readFileSync(fname, "utf8");
+
+  contents.toString().split(/\r\n|\n/).forEach(function (line) {
+    console.log(line);
+    prop.push(line);
+  });
+};
+
+getFile(csvPath);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -38,4 +58,5 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
+app.set('prop', prop);
 module.exports = app;
